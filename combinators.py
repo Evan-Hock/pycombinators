@@ -1,8 +1,8 @@
+from collections.abc import Callable
 from typing import TypeVar
 
 T = TypeVar('T')
 U = TypeVar('U')
-Us = TypeVarTuple('Us')
 V = TypeVar('V')
 W = TypeVar('W')
 
@@ -19,10 +19,8 @@ def comp(f: Callable[[U], V], g: Callable[[T], U]) -> Callable[[T], V]:
 
 # K combinator -- encodes a constant value
 # const(x, y) == x
-# const(x, y, z) == x
-# etc.
-def const(x: T) -> Callable[[*Us], T]:
-    return lambda *ys: x
+def const(x: T) -> Callable[[U], T]:
+    return lambda y: x
 
 # S' combinator
 def frk(f: Callable[[U, V], W], g: Callable[[T], U], h: Callable[[T], V]) -> Callable[[T], W]:
