@@ -42,16 +42,30 @@ def sbst(f, g):
     >>> from functools import partial
     >>> from itertools import islice
     >>> from operator import mul, xor
-    >>> take = lambda n, iterable: list(islice(iterable, n))
-    >>> def sierpinski_generator():
-    ...     sierpinski = sbst(xor, partial(mul, 2))
-    ...     x = 1
+    >>> def iterate(func, start):
+    ...     x = start
     ...     while True:
     ...         yield x
-    ...         x = sierpinski(x)
+    ...         x = func(x)
     ... 
-    >>> for x in map(comp(partial(map, lambda x: '\u25b2' if x == '1' else ' '), partial(flip(format), 'b'), take(64, sierpinski_generator())):
-    ...     print(''.join(x))
+    >>> for x in islice(iterate(sbst(xor, partial(mul, 2)), 1), 16):
+    ...     print(''.join(map(lambda x: ' ' if x == '0' else '\u25b2', format(x, 'b'))))
     ... 
+    ▲
+    ▲▲
+    ▲ ▲
+    ▲▲▲▲
+    ▲   ▲
+    ▲▲  ▲▲
+    ▲ ▲ ▲ ▲
+    ▲▲▲▲▲▲▲▲
+    ▲       ▲
+    ▲▲      ▲▲
+    ▲ ▲     ▲ ▲
+    ▲▲▲▲    ▲▲▲▲
+    ▲   ▲   ▲   ▲
+    ▲▲  ▲▲  ▲▲  ▲▲
+    ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲
+    ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
     """
     return lambda x: f(x, g(x))
