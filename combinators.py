@@ -1,45 +1,57 @@
-from collections.abc import Callable
-from typing import TypeVar
+def identity(x):
+    """Trivial I combinator -- the identity function
 
-T = TypeVar('T')
-U = TypeVar('U')
-V = TypeVar('V')
-W = TypeVar('W')
-
-# Trivial I combinator -- the identity function
-# identity(x) == x
-def identity(x: T) -> T:
+    >>> identity(float('inf'))
+    float('inf')
+    >>> identity(identity)
+    <function identity at <memory location>>
+    """
     return x
 
-# B combinator -- function composition
-# fog = comp(f, g)
-# fog(x) == f(g(x))
-def comp(f: Callable[[U], V], g: Callable[[T], U]) -> Callable[[T], V]:
+def comp(f, g):
+    """B combinator -- function composition
+
+    >>> fog = comp(lambda x: x + 1, lambda x: x * 2)
+    >>> fog(2)
+    5
+    """
     return lambda x: f(g(x))
 
-# K combinator -- encodes a constant value
-# const(x, y) == x
-def const(x: T) -> Callable[[U], T]:
-    return lambda y: x
+def const(x):
+    """K combinators -- encodes a constant value
 
-# S' combinator
-def frk(f: Callable[[U, V], W], g: Callable[[T], U], h: Callable[[T], V]) -> Callable[[T], W]:
-    return lambda x: f(g(x), h(x))
+    >>> always3 = const(3)
+    >>> always3(*range(1000))
+    3
+    """
+    return lambda *ys: x
 
-# W combinator -- duplicator
-# dupd = dupl(f)
-# dupd(x) == f(x, x)
-def dupl(f: Callable[[T, T], U]) -> Callable[[T], U]:
-    return lambda x: f(x, x)
+def flip(f):
+    """C combinator -- flips the arguments to a function around
 
-# C combinator -- flips the argument order of its input function
-def flip(f: Callable[[T, U], V]) -> Callable[[U, T], V]:
+    >>> from functools import reduce
+    >>> from operator import sub
+    >>> reduce(flip(sub), range(10))
+    5
+    """
     return lambda x, y: f(y, x)
 
-# ψ combinator -- "filters" the inputs to one function through another function
-def on(f: Callable[[U, U], V], g: Callable[[T], U]) -> Callable[[T, T], V]:
-    return lambda x, y: f(g(x), g(y))
+def sbst(f, g):
+    """S combinator -- substitutes the result from g(x) into the second argument of 'f' with 'x' preapplied
 
-# S combinator -- "substitution"
-def sbst(f: Callable[[T, T], U], g: Callable[[T], U]) -> Callable[[T], U]:
+    >>> from functools import partial
+    >>> from itertools import islice
+    >>> from operator import mul, xor
+    >>> take = lambda n, iterable: list(islice(iterable, n))
+    >>> def sierpinski_generator():
+    ...     sierpinski = sbst(xor, partial(mul, 2))
+    ...     x = 1
+    ...     while True:
+    ...         yield x
+    ...         x = sierpinski(x)
+    ... 
+    >>> for x in map(comp(partial(map, lambda x: '\u25b2' if x == '1' else ' '), partial(flip(format), 'b'), take(64, sierpinski_generator())):
+    ...     print(''.join(x))
+    ... 
+    """
     return lambda x: f(x, g(x))
