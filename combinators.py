@@ -1,3 +1,7 @@
+__all__ = ['identity', 'comp', 'const', 'flip', 'sbst']
+
+from functools import reduce
+
 def identity(x):
     """Trivial I combinator -- the identity function
 
@@ -8,14 +12,22 @@ def identity(x):
     """
     return x
 
-def comp(f, g):
+def comp(*fs):
     """B combinator -- function composition
 
     >>> fog = comp(lambda x: x + 1, lambda x: x * 2)
     >>> fog(2)
     5
     """
-    return lambda x: f(g(x))
+    match fs:
+        case []:
+            return identity
+        case [f]:
+            return f
+        case [f, g]:
+            return lambda *args, **kwargs: f(g(*args, **kwargs))
+        case _:
+            return reduce(comp, fs)
 
 def const(x):
     """K combinators -- encodes a constant value
@@ -34,7 +46,7 @@ def flip(f):
     >>> reduce(flip(sub), range(10))
     5
     """
-    return lambda x, y: f(y, x)
+    return lambda *args, **kwargs: f(args[1], args[0], *args[2:], **kwargs)
 
 def sbst(f, g):
     """S combinator -- substitutes the result from g(x) into the second argument of 'f' with 'x' preapplied
