@@ -2,7 +2,7 @@ def identity(x):
     """Trivial I combinator -- the identity function
 
     >>> identity(float('inf'))
-    float('inf')
+    inf
     >>> identity(identity)
     <function identity at <memory location>>
     """
