@@ -1,4 +1,4 @@
-__all__ = ['identity', 'comp', 'const', 'flip', 'sbst']
+__all__ = ['identity', 'comp', 'always', 'flip', 'sbst']
 
 from functools import reduce
 
@@ -29,10 +29,10 @@ def comp(*fs):
         case _:
             return reduce(comp, fs)
 
-def const(x):
+def always(x):
     """K combinators -- encodes a constant value
 
-    >>> always3 = const(3)
+    >>> always3 = always(3)
     >>> always3(*range(1000))
     3
     """
