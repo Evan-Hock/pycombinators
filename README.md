@@ -4,12 +4,12 @@ Elementary combinators in Python inspired by LISP and Haskell. Mostly a convenie
 ## Installation
 
 ```
-pip install combinators
+pip install pycombinators
 ```
 
 ## Sample Usage
 ```py
-from combinators import flip
+from pycombinators import flip
 from functools import partial
 
 # returns true if all values in xs are numbers
