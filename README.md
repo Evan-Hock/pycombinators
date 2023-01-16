@@ -13,7 +13,7 @@ from pycombinators import flip
 from functools import partial
 
 # returns true if all values in xs are numbers
-def all_numbers(xs: list) -> bool:
+def is_all_numbers(xs: list) -> bool:
     isinstanceof = flip(isinstance)
     return all(map(partial(isinstanceof, float), xs))
 ```

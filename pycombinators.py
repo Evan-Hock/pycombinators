@@ -1,6 +1,6 @@
 # made with love in vim
 
-__all__ = ['always', 'identity', 'comp','flip', 'sbst']
+__all__ = ['always', 'identity', 'comp', 'flip', 'sbst']
 
 from functools import reduce
 
