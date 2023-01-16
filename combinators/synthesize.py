@@ -1,6 +1,18 @@
+# made with love in vim
+
 __all__ = ['identity', 'comp', 'always', 'flip', 'sbst']
 
 from functools import reduce
+
+def always(x):
+    """K combinator -- encodes a constant value
+
+    >>> always3 = always(3)
+    >>> always3(*range(1000))
+    3
+    """
+    return lambda *ys: x
+
 
 def identity(x):
     """Trivial I combinator -- the identity function
@@ -28,15 +40,6 @@ def comp(*fs):
             return lambda *args, **kwargs: f(g(*args, **kwargs))
         case _:
             return reduce(comp, fs)
-
-def always(x):
-    """K combinators -- encodes a constant value
-
-    >>> always3 = always(3)
-    >>> always3(*range(1000))
-    3
-    """
-    return lambda *ys: x
 
 def flip(f):
     """C combinator -- flips the arguments to a function around
