@@ -31,15 +31,7 @@ def comp(*fs):
     >>> fog(2)
     5
     """
-    match fs:
-        case []:
-            return identity
-        case [f]:
-            return f
-        case [f, g]:
-            return lambda *args, **kwargs: f(g(*args, **kwargs))
-        case _:
-            return reduce(comp, fs)
+    return reduce(lambda f, g: lambda *args, **kwargs: f(g(*args, **kwargs)), fs, identity)
 
 def flip(f):
     """C combinator -- flips the arguments to a function around
